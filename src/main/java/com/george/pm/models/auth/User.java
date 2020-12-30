@@ -1,10 +1,8 @@
 package com.george.pm.models.auth;
 
 import com.george.pm.models.BaseEntity;
-import com.george.pm.models.group.Groups;
 import com.george.pm.models.project.Project;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 
 import java.util.*;
 
@@ -14,16 +12,13 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "users",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = "username"),
-                @UniqueConstraint(columnNames = "email")
-        })
+@Table(name = "users")
 public class User extends BaseEntity {
+
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column
+    @Column(name = "us_id")
     private String id;
 
     @NotBlank
@@ -39,20 +34,12 @@ public class User extends BaseEntity {
     @Size(max = 120)
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @OneToMany(targetEntity = Role.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Role> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Project> projectsOwner;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_group",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "group_id"))
-    List<Groups> groups = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -117,14 +104,6 @@ public class User extends BaseEntity {
 
     public void setProjectsOwner(List<Project> projectsOwner) {
         this.projectsOwner = projectsOwner;
-    }
-
-    public List<Groups> getGroups() {
-        return groups;
-    }
-
-    public void setGroups(List<Groups> groups) {
-        this.groups = groups;
     }
 
     public List<Project> getProjects() {

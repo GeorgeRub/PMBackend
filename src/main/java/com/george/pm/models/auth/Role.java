@@ -1,6 +1,7 @@
 package com.george.pm.models.auth;
 
 import com.george.pm.models.BaseEntity;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
@@ -9,8 +10,10 @@ import javax.persistence.*;
 public class Role extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @Column
+    private String id;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
@@ -23,15 +26,16 @@ public class Role extends BaseEntity {
 
     }
 
+
     public Role(ERole name) {
         this.name = name;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

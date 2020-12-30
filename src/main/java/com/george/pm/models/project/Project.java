@@ -26,7 +26,7 @@ public class Project extends BaseEntity {
 //    private User owner;
 
     @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "user_id")
     private User owner;
 
     @ManyToMany(mappedBy = "projects")
