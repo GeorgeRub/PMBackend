@@ -37,6 +37,7 @@ public class ProjectController {
         List<ShortProject> projects = new ArrayList<>();
         User user = userRepository.findByUsernameOne(principal.getName());
         if (user.getProjectsOwner() != null && !user.getProjectsOwner().isEmpty()) {
+            System.out.println(user.getProjectsOwner().size());
             for (Project project : user.getProjectsOwner()) {
                 ShortProject shortProject = new ShortProject();
                 shortProject.setProjectId(project.getId());
@@ -57,8 +58,12 @@ public class ProjectController {
         Project project = new Project();
         project.setProjectName(createProjectRequest.getProjectName());
         project.setOwner(user);
+        project.getUsers().add(user);
         project = projectService.save(project);
         if (project.getId() != null) {
+//            user.getProjectsOwner().add(project);
+//            user.getProjects().add(project);
+            userRepository.save(user);
             response.setProjectId(project.getId());
             response.setSuccess(true);
         }
