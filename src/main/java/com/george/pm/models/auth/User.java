@@ -1,6 +1,7 @@
 package com.george.pm.models.auth;
 
 import com.george.pm.models.BaseEntity;
+import com.george.pm.models.group.Team;
 import com.george.pm.models.project.Project;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -39,6 +40,12 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Project> projectsOwner;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_team",
+            joinColumns = {@JoinColumn(name = "us_id")},
+            inverseJoinColumns = {@JoinColumn(name = "team_id")})
+    List<Team> teams = new ArrayList<>();
 
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -114,6 +121,13 @@ public class User extends BaseEntity {
         this.projects = projects;
     }
 
+    public List<Team> getTeams() {
+        return teams;
+    }
+
+    public void setTeams(List<Team> teams) {
+        this.teams = teams;
+    }
 
     @Override
     public String toString() {
