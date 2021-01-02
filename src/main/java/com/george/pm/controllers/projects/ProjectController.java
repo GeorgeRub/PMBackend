@@ -59,6 +59,7 @@ public class ProjectController {
         project.setProjectName(createProjectRequest.getProjectName());
         project.setOwner(user);
         project.getUsers().add(user);
+
         project = projectService.save(project);
         if (project.getId() != null) {
 //            user.getProjectsOwner().add(project);
